@@ -124,6 +124,8 @@
             on:drop={event => drop(event, i)}
             on:dragover|preventDefault={() => false}
             on:dragenter={() => hovering = i}
+            on:mousedown={() => hovering = i}
+            on:mouseup={() => hovering = undefined}
             class:is-active={hovering === i}
           >
             <td>
