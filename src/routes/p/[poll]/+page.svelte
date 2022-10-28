@@ -166,7 +166,7 @@
     </tbody>
   </table>
 
-  <h4>Noch nie gespielt</h4>
+  <h3>...mal was Neues</h3>
 
   <table class="available-games">
     <tbody>
