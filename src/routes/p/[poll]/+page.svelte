@@ -149,7 +149,28 @@
 
   <table class="available-games">
     <tbody>
-      {#each data.boardgames.filter(it => !ranking.map(bg => bg._id).includes(it._id)) as boardgame}
+      {#each data.boardgames.filter(it => !it.neverPlayed && !ranking.map(bg => bg._id).includes(it._id)) as boardgame}
+        <tr>
+          <td>
+            <h4>{boardgame.emoji} {boardgame.name}</h4>
+          </td>
+          <td>
+            <button
+              type="button" class="outline"
+              on:click={() => add(boardgame)}
+              disabled={ranking.length >= data.poll.rankingSize}
+            >Auswählen</button>
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+
+  <h4>Noch nie gespielt</h4>
+
+  <table class="available-games">
+    <tbody>
+      {#each data.boardgames.filter(it => it.neverPlayed && !ranking.map(bg => bg._id).includes(it._id)) as boardgame}
         <tr>
           <td>
             <h4>{boardgame.emoji} {boardgame.name}</h4>

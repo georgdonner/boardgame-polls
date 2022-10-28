@@ -11,6 +11,7 @@ export interface Boardgame {
   _id: string;
   name: string;
   emoji: string;
+  neverPlayed?: boolean;
 }
 
 export interface Entry {
