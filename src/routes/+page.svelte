@@ -18,11 +18,15 @@
 
   <label for="pollLink">Link zur Umfrage</label>
   <input type="text" name="pollLink" id="pollLink" bind:value={form.pollLink} readonly>
-  <button on:click={copy}>Link kopieren</button>
-
+  <button class="outline" on:click={copy}>Link kopieren</button>
   {#if copied}
     Kopiert!
   {/if}
+
+  <hr>
+
+  <br>
+  <a style="width: 100%" role="button" href={form.pollLink}>Zur Umfrage</a>
 {:else}
   <h1>Neue Umfrage erstellen</h1>
 

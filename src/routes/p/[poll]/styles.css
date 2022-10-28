@@ -1,0 +1,21 @@
+table td > * {
+  margin: 0;
+}
+.remove-col {
+  display: flex;
+  justify-content: flex-end;
+}
+.remove-col > button {
+  max-width: 200px;
+}
+
+.ranking .is-active {
+  background-color: #3273dc;
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  .available-games td > h4 {
+    font-size: 1rem;
+  }
+}
