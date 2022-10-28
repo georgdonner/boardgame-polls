@@ -1,12 +1,13 @@
 import { nanoid } from 'nanoid';
 
-import db from '$lib/server/db';
+import { connect } from '$lib/server/db';
 import type { Poll } from '$lib/server/db';
 import type { Actions } from './$types';
 import type { MongoError } from 'mongodb';
 
 export const actions: Actions = {
   default: async ({ request }) => {
+    const db = await connect();
     const data = await request.formData();
 
     const poll: Poll = {
@@ -21,6 +22,7 @@ export const actions: Actions = {
 
     while (!inserted) {
       try {
+
         const { insertedId } = await db.collection<Poll>('polls')
           .insertOne(poll);
 

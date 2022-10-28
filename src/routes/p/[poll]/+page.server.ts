@@ -1,11 +1,13 @@
 import { error } from '@sveltejs/kit';
 
-import db from '$lib/server/db';
+import { connect } from '$lib/server/db';
 import type { Boardgame, Entry, Poll } from '$lib/server/db';
 import type { Actions, PageServerLoad } from './$types';
 import type { UpdateFilter } from 'mongodb';
 
 export const load: PageServerLoad = async ({ params }) => {
+  const db = await connect();
+
   const boardgames = await db.collection<Boardgame>('boardgames')
     .find({}, { sort: 'name' })
     .toArray();
@@ -25,7 +27,9 @@ export const load: PageServerLoad = async ({ params }) => {
 
 export const actions: Actions = {
   default: async ({ request, params }) => {
+    const db = await connect();
     const data = await request.formData();
+    
     const poll = await db.collection<Poll>('polls')
       .findOne({ _id: params.poll });
 

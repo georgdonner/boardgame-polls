@@ -1,9 +1,11 @@
 import { MongoClient } from 'mongodb';
 import { MONGO_URL } from '$env/static/private';
 
-const client = new MongoClient(MONGO_URL);
-
-export default (await client.connect()).db();
+export const connect = async () => {
+  const client = new MongoClient(MONGO_URL);
+  await client.connect();
+  return client.db();
+}
  
 export interface Boardgame {
   _id: string;
