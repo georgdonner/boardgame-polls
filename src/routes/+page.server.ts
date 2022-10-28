@@ -11,7 +11,7 @@ export const actions: Actions = {
     const data = await request.formData();
 
     const poll: Poll = {
-      _id: 'iH6hXn',
+      _id: nanoid(6),
       name: String(data.get('name')),
       participants: Number(data.get('participants')),
       rankingSize: Number(data.get('rankingSize')),
