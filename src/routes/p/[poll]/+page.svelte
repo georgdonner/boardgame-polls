@@ -80,6 +80,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>{data.poll.name} - Brettspiel-Umfrage</title>
+</svelte:head>
+
 <h1>{data.poll.name}</h1>
 
 {#if data.poll.ended}

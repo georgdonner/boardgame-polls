@@ -13,6 +13,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Neue Brettspiel-Umfrage</title>
+</svelte:head>
+
 {#if form?.pollId}
   <h1>Umfrage erfolgreich erstellt!</h1>
 
@@ -28,7 +32,7 @@
   <br>
   <a style="width: 100%" role="button" href={form.pollLink}>Zur Umfrage</a>
 {:else}
-  <h1>Neue Umfrage erstellen</h1>
+  <h1>Neue Brettspiel-Umfrage erstellen</h1>
 
   <form method="POST">
     <label for="name">Name</label>
