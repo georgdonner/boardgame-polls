@@ -3,7 +3,7 @@ import { error } from '@sveltejs/kit';
 import { connect } from '$lib/server/db';
 import type { Boardgame, Entry, Poll } from '$lib/server/db';
 import type { Actions, PageServerLoad } from './$types';
-import type { UpdateFilter } from 'mongodb';
+import type { Filter, UpdateFilter } from 'mongodb';
 
 export const load: PageServerLoad = async ({ params }) => {
   const db = await connect();
@@ -42,18 +42,33 @@ export const actions: Actions = {
       ranking: (data.get('ranking') as string).split(','),
     };
 
-    const update: UpdateFilter<Poll> = {
-      $push: { entries: entry }
-    };
+    const alreadyEntered = Boolean(poll.entries.find(it => it.name === entry.name));
 
-    if (poll.participants <= poll.entries.length + 1) {
-      update.$set = {
-        ended: new Date(),
+    let filter: Filter<Poll>; 
+    let update: UpdateFilter<Poll>;
+
+    if (alreadyEntered) {
+      filter = { _id: params.poll, 'entries.name': entry.name };
+      update = {
+        $set: {
+          'entries.$.ranking': entry.ranking,
+          ...(poll.participants <= poll.entries.length + 1 && {
+            ended: new Date(),
+          }),
+        },
+      };
+    } else {
+      filter = { _id: params.poll };
+      update = {
+        $push: { entries: entry },
+        ...(poll.participants <= poll.entries.length + 1 && {
+          $set: {ended: new Date()},
+        }),
       };
     }
 
     await db.collection<Poll>('polls')
-      .updateOne({ _id: params.poll }, update);
+      .updateOne(filter, update);
 
     return {
       success: true,
