@@ -10,6 +10,7 @@
 
   let ranking: Boardgame[] = [];
   let hovering: number | undefined;
+  let busy = false;
 
   /* RANKING */
   const add = (boardgame: Boardgame) => {
@@ -105,6 +106,7 @@
     method="POST"
     use:enhance={({ data: formData }) => {
       formData.append('ranking', ranking.map(it => it._id).join(','));
+      busy = true;
     }}
   >
 
@@ -145,7 +147,13 @@
     <p>Noch kein Spiel ausgewählt</p>
   {/if}
 
-  <button type="submit" disabled={ranking.length === 0}>Abschicken</button>
+  <button
+    type="submit"
+    disabled={ranking.length === 0 || busy}
+    aria-busy={busy}
+  >
+    Abschicken
+  </button>
 
   <h3>Spiele zur Auswahl</h3>
 

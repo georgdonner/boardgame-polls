@@ -1,9 +1,11 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
   import type { ActionData } from './$types';
 
   export let form: ActionData;
 
   let copied = false;
+  let busy = false;
 
   const copy = () => {
     if (form?.pollLink) {
@@ -34,7 +36,7 @@
 {:else}
   <h1>Neue Brettspiel-Umfrage erstellen</h1>
 
-  <form method="POST">
+  <form method="POST" use:enhance={() => {busy = true;}}>
     <label for="name">Name</label>
     <input type="text" name="name">
     
@@ -44,6 +46,6 @@
     <label for="rankingSize">Votes pro Teilnehmer:in</label>
     <input type="number" name="rankingSize" value="5" min="1">
     
-    <button type="submit">Umfrage erstellen</button>
+    <button type="submit" aria-busy={busy} disabled={busy}>Umfrage erstellen</button>
   </form>
 {/if}
