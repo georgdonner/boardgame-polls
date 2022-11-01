@@ -115,36 +115,36 @@
 
   <h3>Dein Ranking</h3>
 
-  {#if ranking.length > 0}
-    <table class="ranking">
-      <tbody>
-        {#each ranking as boardgame, i (boardgame._id)}
-          <tr
-            animate:flip="{{duration: 500}}"
-            draggable={true} 
-            on:dragstart={event => dragstart(event, i)}
-            on:drop={event => drop(event, i)}
-            on:dragover|preventDefault={() => false}
-            on:dragenter={() => hovering = i}
-            on:mousedown={() => hovering = i}
-            on:mouseup={() => hovering = undefined}
-            class:is-active={hovering === i}
-          >
-            <td>
-              <h4>{i + 1}</h4>
-            </td>
-            <td>
-              <h4>{boardgame.emoji} {boardgame.name}</h4>
-            </td>
-            <td class="remove-col">
-              <button type="button" class="outline secondary" on:click={() => remove(boardgame)}>x</button>
-            </td>
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-  {:else}
-    <p>Noch kein Spiel ausgewählt</p>
+  <table class="ranking">
+    <tbody>
+      {#each ranking as boardgame, i (boardgame._id)}
+        <tr
+          animate:flip="{{duration: 500}}"
+          draggable={true} 
+          on:dragstart={event => dragstart(event, i)}
+          on:drop={event => drop(event, i)}
+          on:dragover|preventDefault={() => false}
+          on:dragenter={() => hovering = i}
+          on:mousedown={() => hovering = i}
+          on:mouseup={() => hovering = undefined}
+          class:is-active={hovering === i}
+        >
+          <td>
+            <h4>{i + 1}</h4>
+          </td>
+          <td>
+            <h4>{boardgame.emoji} {boardgame.name}</h4>
+          </td>
+          <td class="remove-col">
+            <button type="button" class="outline secondary" on:click={() => remove(boardgame)}>x</button>
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+
+  {#if ranking.length < data.poll.rankingSize}
+    <p>Du kannst {ranking.length > 0 ? 'noch' : ''} {data.poll.rankingSize - ranking.length} {(data.poll.rankingSize - ranking.length) === 1 ? 'Spiel' : 'Spiele'} auswählen</p>
   {/if}
 
   <button
