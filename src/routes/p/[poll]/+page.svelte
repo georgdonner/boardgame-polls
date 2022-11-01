@@ -111,7 +111,7 @@
   >
 
   <label for="name">Dein Name</label>
-  <input type="text" name="name">
+  <input type="text" name="name" required>
 
   <h3>Dein Ranking</h3>
 

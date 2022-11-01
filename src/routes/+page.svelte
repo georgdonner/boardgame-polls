@@ -38,13 +38,13 @@
 
   <form method="POST" use:enhance={() => {busy = true;}}>
     <label for="name">Name</label>
-    <input type="text" name="name">
+    <input type="text" name="name" required>
     
     <label for="participants">Anzahl der Teilnehmer:innen</label>
-    <input type="number" name="participants" value="4" min="1">
+    <input type="number" name="participants" value="4" min="1" required>
     
     <label for="rankingSize">Votes pro Teilnehmer:in</label>
-    <input type="number" name="rankingSize" value="5" min="1">
+    <input type="number" name="rankingSize" value="5" min="1" required>
     
     <button type="submit" aria-busy={busy} disabled={busy}>Umfrage erstellen</button>
   </form>
