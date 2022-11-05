@@ -26,8 +26,14 @@
       data.boardgames.map(it => [it._id, it])
     );
 
+    interface GameScore {
+      gameId: string;
+      score: number;
+      votes: number;
+    }
+
     interface WinnersMap {
-      [key: string]: number;
+      [key: string]: GameScore;
     }
 
     const winnersMap: WinnersMap = data.poll.entries
@@ -35,20 +41,24 @@
         (it, index) => ({ gameId: it, score: data.poll.rankingSize - index })
       ))
       .reduce((prev: any, curr) => {
-        const score: number = (prev[curr.gameId] ?? 0) + curr.score;
+        const gameScore: GameScore = {
+          gameId: curr.gameId,
+          score: (prev[curr.gameId]?.score ?? 0) + curr.score,
+          votes: (prev[curr.gameId]?.votes ?? 0) + 1,
+        };
         return {
           ...prev,
-          [curr.gameId]: score,
+          [curr.gameId]: gameScore,
         };
       }, {});
 
     return Object.entries(winnersMap)
-      .map(([gameId, score]) => ({
+      .map(([gameId, gameScore]) => ({
         boardgame: boardgameMap.get(gameId),
-        score,
+        score: gameScore.score,
+        votes: gameScore.votes
       }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, data.poll.rankingSize);
+      .sort((a, b) => b.score - a.score || b.votes - a.votes);
   }
 
   /* DRAG AND DROP */
@@ -93,7 +103,7 @@
 
   {#each calculateWinners() as winner, i}
     <h4>
-      {i + 1}. {winner.boardgame?.emoji} {winner.boardgame?.name} ({winner.score} Punkte)
+      {i + 1}. {winner.boardgame?.emoji} {winner.boardgame?.name} ({winner.score} Punkte, {winner.votes} Votes)
     </h4>
   {/each}
 
