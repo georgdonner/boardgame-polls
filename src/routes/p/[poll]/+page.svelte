@@ -120,6 +120,17 @@
     }}
   >
 
+  <p class="subtitle">
+    {#if data.poll.entries.length > 1}
+      Es haben schon {data.poll.entries.length} Teilnehmer:innen abgestimmt.
+    {:else if data.poll.entries.length === 1}
+      Es hat schon 1 Teilnehmer:in abgestimmt.
+    {:else}
+      Es hat noch niemand abgestimmt.
+    {/if}
+  </p>
+  
+
   <label for="name">Dein Name</label>
   <input type="text" name="name" required>
 
