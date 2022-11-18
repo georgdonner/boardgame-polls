@@ -36,7 +36,7 @@
 {:else}
   <h1>Neue Brettspiel-Umfrage erstellen</h1>
 
-  <form method="POST" use:enhance={() => {busy = true;}}>
+  <form method="POST" action="/" use:enhance={() => {busy = true;}}>
     <label for="name">Name</label>
     <input type="text" name="name" required>
     
