@@ -114,6 +114,7 @@
 {:else}
   <form
     method="POST"
+    action="?/vote"
     use:enhance={({ data: formData }) => {
       formData.append('ranking', ranking.map(it => it._id).join(','));
       busy = true;

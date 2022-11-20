@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ params }) => {
 }
 
 export const actions: Actions = {
-  default: async ({ request, params }) => {
+  vote: async ({ request, params }) => {
     const db = await connect();
     const data = await request.formData();
     
