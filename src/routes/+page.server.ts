@@ -15,6 +15,7 @@ export const actions: Actions = {
       name: String(data.get('name')),
       participants: Number(data.get('participants')),
       rankingSize: Number(data.get('rankingSize')),
+      rankingShortSize: Number(data.get('rankingShortSize')),
       entries: [],
     };
 

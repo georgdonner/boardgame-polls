@@ -40,6 +40,7 @@ export const actions: Actions = {
     const entry: Entry = {
       name: String(data.get('name')),
       ranking: (data.get('ranking') as string).split(','),
+      rankingShort: (data.get('rankingShort') as string).split(','),
     };
 
     const alreadyEntered = Boolean(poll.entries.find(it => it.name === entry.name));
@@ -52,6 +53,7 @@ export const actions: Actions = {
       update = {
         $set: {
           'entries.$.ranking': entry.ranking,
+          'entries.$.rankingShort': entry.rankingShort,
           ...(poll.participants <= poll.entries.length + 1 && {
             ended: new Date(),
           }),

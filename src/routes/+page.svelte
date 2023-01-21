@@ -45,6 +45,9 @@
     
     <label for="rankingSize">Votes pro Teilnehmer:in</label>
     <input type="number" name="rankingSize" value="5" min="1" required>
+
+    <label for="rankingShortSize">Absacker-Votes pro Teilnehmer:in</label>
+    <input type="number" name="rankingShortSize" value="3" min="1" required>
     
     <button type="submit" aria-busy={busy} disabled={busy}>Umfrage erstellen</button>
   </form>

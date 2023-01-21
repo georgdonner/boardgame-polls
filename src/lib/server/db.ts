@@ -12,11 +12,13 @@ export interface Boardgame {
   name: string;
   emoji: string;
   neverPlayed?: boolean;
+  short?: boolean;
 }
 
 export interface Entry {
   name: string;
   ranking: string[];
+  rankingShort: string[];
 }
 
 export interface Poll {
@@ -24,6 +26,7 @@ export interface Poll {
   name: string;
   participants: number;
   rankingSize: number;
+  rankingShortSize: number;
   entries: Entry[];
   ended?: Date;
 }
