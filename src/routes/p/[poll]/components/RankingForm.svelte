@@ -7,6 +7,7 @@
   export let ranking: Boardgame[];
   export let size: number;
   export let label: string = '';
+  export let buttonLabel: string = 'Weiter';
   export let busy = false;
 
   let hovering: number | undefined;
@@ -92,7 +93,7 @@
   disabled={ranking.length === 0 || busy}
   aria-busy={busy}
 >
-  Abschicken
+  {buttonLabel}
 </button>
 
 <h3>{label || 'Spiele'} zur Auswahl</h3>

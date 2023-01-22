@@ -19,8 +19,47 @@ table td > * {
   color: #fff;
 }
 
+.tabs {
+  margin-bottom: 2rem;
+}
+.tab span:first-child {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  padding: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  text-align: center;
+  font-weight: bold;
+}
+.tab span:nth-child(2) {
+  margin: 0 .5rem;
+}
+.tab span:nth-child(3) {
+  margin-right: .5rem;
+}
+.tab.is-active span:nth-child(2) {
+  font-weight: bold;
+}
+
 @media (max-width: 600px) {
   .available-games td > h4 {
     font-size: 1rem;
+  }
+  .tabs {
+    display: flex;
+    justify-content: space-between;
+    font-size: 8pt;
+  }
+  .tab span:first-child {
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+  }
+  .tab span:nth-child(2) {
+    margin: 0 .2rem;
+  }
+  .tab span:nth-child(3) {
+    display: none;
   }
 }
