@@ -42,6 +42,36 @@ table td > * {
   font-weight: bold;
 }
 
+@media (max-width: 350px) {
+  .tabs {
+    font-size: 8pt;
+  }
+  .tab span:first-child {
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+  }
+}
+@media (min-width: 351px) and (max-width: 420px) {
+  .tabs {
+    font-size: 10pt;
+  }
+  .tab span:first-child {
+    width: 25px;
+    height: 25px;
+    padding: 3px;
+  }
+}
+@media (min-width: 421px) and (max-width: 600px) {
+  .tabs {
+    font-size: 11pt;
+  }
+  .tab span:first-child {
+    width: 30px;
+    height: 30px;
+    padding: 4px;
+  }
+}
 @media (max-width: 600px) {
   .available-games td > h4 {
     font-size: 1rem;
@@ -49,12 +79,6 @@ table td > * {
   .tabs {
     display: flex;
     justify-content: space-between;
-    font-size: 8pt;
-  }
-  .tab span:first-child {
-    width: 20px;
-    height: 20px;
-    padding: 2px;
   }
   .tab span:nth-child(2) {
     margin: 0 .2rem;
