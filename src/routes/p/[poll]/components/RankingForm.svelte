@@ -11,6 +11,7 @@
   export let size: number;
   export let label = '';
   export let buttonLabel = 'Weiter';
+  export let buttonType: "button" | "submit" = 'button';
   export let busy = false;
 
   const handleAdd = (event: CustomEvent) => {
@@ -32,7 +33,7 @@
 />
 
 <button
-  type="button"
+  type={buttonType}
   on:click={() => dispatch('submit')}
   disabled={ranking.length === 0 || busy}
   aria-busy={busy}

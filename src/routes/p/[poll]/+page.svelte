@@ -11,7 +11,6 @@
 
   let ranking: Boardgame[] = [];
   let rankingShort: Boardgame[] = [];
-  let htmlForm: HTMLFormElement;
   let busy = false;
 
   /* TABS */
@@ -92,7 +91,6 @@
   <form
     method="POST"
     action="?/vote"
-    bind:this={htmlForm}
     use:enhance={({ data: formData }) => {
       formData.append('ranking', ranking.map(it => it._id).join(','));
       formData.append('rankingShort', rankingShort.map(it => it._id).join(','));
@@ -141,9 +139,9 @@
       size={data.poll.rankingShortSize}
       label="Absacker"
       buttonLabel="Abschicken"
+      buttonType="submit"
       busy={busy}
       bind:ranking={rankingShort}
-      on:submit={() => htmlForm.requestSubmit()}
     />
   </div>
   </form>
