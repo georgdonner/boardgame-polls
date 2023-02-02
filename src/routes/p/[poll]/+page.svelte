@@ -2,8 +2,10 @@
   import { enhance } from '$app/forms';
   import type { Boardgame } from '$lib/server/db';
   import type { ActionData, PageData } from './$types';
+
   import RankingForm from './components/RankingForm.svelte';
   import Results from './components/Results.svelte';
+  import NotificationBox from './components/NotificationBox.svelte';
   import './styles.css';
   
   export let form: ActionData;
@@ -11,6 +13,7 @@
 
   let ranking: Boardgame[] = [];
   let rankingShort: Boardgame[] = [];
+  let pushSubscription: PushSubscription|undefined;
   let busy = false;
 
   /* TABS */
@@ -94,6 +97,9 @@
     use:enhance={({ data: formData }) => {
       formData.append('ranking', ranking.map(it => it._id).join(','));
       formData.append('rankingShort', rankingShort.map(it => it._id).join(','));
+      if (pushSubscription) {
+        formData.append('pushSubscription', JSON.stringify(pushSubscription));
+      }
       busy = true;
       return async ({ update }) => {
         busy = false;
@@ -113,6 +119,10 @@
         }
       }}
     >
+
+    <NotificationBox bind:pushSubscription={pushSubscription} />
+    <br>
+
     <button
       type="button"
       on:click={() => {currentTab = currentTab + 1;}}
