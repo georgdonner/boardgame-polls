@@ -16,6 +16,8 @@ sw.addEventListener('push', (event) => {
       const data = event.data.json();
 
       event.waitUntil(sw.registration.showNotification(data.text, {
+        icon: '/game_die.png',
+        badge: '/game_die.png',
         data: {
           link: data.link,
         },
@@ -45,7 +47,7 @@ const openPage = async (url: string) => {
   }
 
   if (matchingClient) {
-    return matchingClient.focus();
+    return matchingClient.navigate(url);
   } else {
     return sw.clients.openWindow(url);
   }
