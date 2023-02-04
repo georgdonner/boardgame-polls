@@ -17,6 +17,7 @@
   let rankingShort: Boardgame[] = [];
   let pushSubscription: PushSubscription|undefined;
   let busy = false;
+  let isLast = poll.entries.length >= poll.participants - 1;
 
   const nextTab = () => {
     currentTab += 1;
@@ -61,8 +62,6 @@
     method="POST"
     action="?/vote"
     use:enhance={({ data: formData }) => {
-      const isLast = poll.entries.length === poll.participants - 1;
-
       formData.append('ranking', ranking.map(it => it._id).join(','));
       formData.append('rankingShort', rankingShort.map(it => it._id).join(','));
       if (! isLast && pushSubscription) {
@@ -78,7 +77,11 @@
   >
 
   <div hidden={currentTab !== TabIndex.Name}>
-    <NameForm bind:pushSubscription={pushSubscription} on:submit={nextTab} />
+    <NameForm
+      bind:pushSubscription={pushSubscription}
+      on:submit={nextTab}
+      isLast={isLast}
+    />
   </div>
 
   <div hidden={currentTab !== TabIndex.Games}>

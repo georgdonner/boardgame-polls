@@ -5,6 +5,7 @@
   import NotificationBox from './NameForm/NotificationBox.svelte';
 
   export let pushSubscription: PushSubscription|undefined;
+  export let isLast: boolean;
 </script>
 
 <label for="name">Dein Name</label>
@@ -17,8 +18,10 @@
   }}
 >
 
-<NotificationBox bind:pushSubscription={pushSubscription} />
-<br>
+{#if ! isLast}
+  <NotificationBox bind:pushSubscription={pushSubscription} />
+  <br>
+{/if}
 
 <button
   type="button"
