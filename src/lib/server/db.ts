@@ -15,10 +15,21 @@ export interface Boardgame {
   short?: boolean;
 }
 
+export interface SubscriptionKeys {
+  p256dh: string;
+  auth: string;
+}
+
+export interface Subscription {
+  endpoint: string;
+  keys: SubscriptionKeys;
+}
+
 export interface Entry {
   name: string;
   ranking: string[];
   rankingShort: string[];
+  pushSubscription?: Subscription;
 }
 
 export interface Poll {
