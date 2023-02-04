@@ -61,9 +61,11 @@
     method="POST"
     action="?/vote"
     use:enhance={({ data: formData }) => {
+      const isLast = poll.entries.length === poll.participants - 1;
+
       formData.append('ranking', ranking.map(it => it._id).join(','));
       formData.append('rankingShort', rankingShort.map(it => it._id).join(','));
-      if (pushSubscription) {
+      if (! isLast && pushSubscription) {
         formData.append('pushSubscription', JSON.stringify(pushSubscription));
       }
       busy = true;
