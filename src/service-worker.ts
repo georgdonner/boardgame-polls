@@ -4,7 +4,7 @@
  
 const sw = self as unknown as ServiceWorkerGlobalScope;
 
-import { version } from '$service-worker';
+import { files, version } from '$service-worker';
 
 sw.addEventListener('install', () => {
   console.log(`Service worker installed with version ${version}.`);
@@ -14,10 +14,11 @@ sw.addEventListener('push', (event) => {
   if (event.data) {
     try {
       const data = event.data.json();
+      const icon = files.find(it => it.includes('game_die'));
 
       event.waitUntil(sw.registration.showNotification(data.text, {
-        icon: '/game_die.png',
-        badge: '/game_die.png',
+        icon,
+        badge: icon,
         data: {
           link: data.link,
         },
@@ -47,7 +48,8 @@ const openPage = async (url: string) => {
   }
 
   if (matchingClient) {
-    return matchingClient.navigate(url);
+    matchingClient.postMessage('reload');
+    return matchingClient.focus();
   } else {
     return sw.clients.openWindow(url);
   }

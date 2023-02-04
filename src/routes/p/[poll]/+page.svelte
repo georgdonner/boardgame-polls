@@ -1,6 +1,8 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { enhance } from '$app/forms';
   import type { Boardgame } from '$lib/server/db';
+  import { isSupported } from '$lib/pushService';
   import type { ActionData, PageData } from './$types';
 
   import RankingForm from './components/RankingForm.svelte';
@@ -37,6 +39,16 @@
   ];
 
   let currentTab = form?.success ? TabIndex.Done : TabIndex.Name;
+
+  onMount(() => {
+    if (isSupported) {
+      navigator.serviceWorker.addEventListener('message', (e) => {
+        if (e.data === 'reload') {
+          window.location.reload();
+        }
+      });
+    }
+  })
 </script>
 
 <svelte:head>
