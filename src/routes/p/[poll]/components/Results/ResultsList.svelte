@@ -27,7 +27,7 @@
       .flatMap(entry => entry[rankingField].map(
         (it, index) => ({ gameId: it, score: size - index })
       ))
-      .reduce((prev: any, curr) => {
+      .reduce((prev: any, curr) => { // eslint-disable-line @typescript-eslint/no-explicit-any
         const gameScore: GameScore = {
           gameId: curr.gameId,
           score: (prev[curr.gameId]?.score ?? 0) + curr.score,
