@@ -59,9 +59,6 @@ const saveEntry = async (db: Db, poll: Poll, entry: Entry): Promise<WithId<Poll>
       $set: {
         'entries.$.ranking': entry.ranking,
         'entries.$.rankingShort': entry.rankingShort,
-        ...(hasEnded && {
-          ended: new Date(),
-        }),
       },
     };
   } else {
