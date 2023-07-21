@@ -5,10 +5,13 @@ import type { PollParams } from './fixtures/poll-page.ts';
 import { PollPage } from './fixtures/poll-page.ts';
 
 const defaultParams: PollParams = {
-  participants: 3,
+  participants: 2,
   rankingSize: 3,
   rankingShortSize: 3,
 };
+
+const defaultGames = boardgames.filter(it => !it.short).slice(0, defaultParams.rankingSize);
+const defaultShortGames = boardgames.filter(it => it.short).slice(0, defaultParams.rankingShortSize);
 
 // Extend basic test by providing a "todoPage" fixture.
 const test = base.extend<{ pollPage: PollPage, pollParams: PollParams }>({
@@ -17,6 +20,7 @@ const test = base.extend<{ pollPage: PollPage, pollParams: PollParams }>({
     const pollPage = new PollPage(page);
     await pollPage.create(pollParams);
     await use(pollPage);
+    await page.goto('/');
   },
 });
 
@@ -28,6 +32,23 @@ const selectGame = async ({ page, name }) => {
     .click();
 }
 
+// Very basic entering a poll without any expect checks, select first three games
+const enterPoll = async ({ page, name }) => {
+  await page.getByRole('textbox').click();
+  await page.getByRole('textbox').fill(name);
+  await page.getByRole('button', { name: 'Weiter' }).click();
+
+  for (const game of defaultGames) {
+    await selectGame({ page, name: game.name });
+  }
+  await page.getByRole('button', { name: 'Weiter' }).click();
+
+  for (const game of defaultShortGames) {
+    await selectGame({ page, name: game.name });
+  }
+  await page.getByRole('button', { name: 'Abschicken' }).click();
+}
+
 test.describe('Entering polls', () => {
   test('Enter poll', async ({ pollPage }) => {
     const { page } = pollPage;
@@ -37,12 +58,13 @@ test.describe('Entering polls', () => {
 
     await page.getByRole('button', { name: 'Weiter' }).click();
 
-    const [game] = boardgames;
-    const shortGame = boardgames.find(it => it.short);
+
+    const [game] = defaultGames;
+    const [shortGame] = defaultShortGames;
 
     await expect(page
       .getByRole('paragraph')
-      .filter({ hasText: `Du kannst ${defaultParams.participants} Spiele auswählen` }))
+      .filter({ hasText: `Du kannst ${defaultParams.rankingSize} Spiele auswählen` }))
       .toBeVisible();
     await expect(page.getByText(game.name)).toBeVisible();
     await expect(page.getByText(shortGame.name)).not.toBeVisible();
@@ -84,7 +106,32 @@ test.describe('Entering polls', () => {
 
     await page.getByRole('button', { name: 'Abschicken' }).click();
 
-    await expect(page.getByRole('heading').filter({ hasText: 'Danke für deine Teilnahme!' })).toBeVisible();
+    await expect(page
+      .getByRole('heading')
+      .filter({ hasText: 'Danke für deine Teilnahme!' }))
+      .toBeVisible();
+  });
+
+  test('Show results when poll has finished', async ({ pollPage }) => {
+    const { page } = pollPage;
+    
+    await enterPoll({ page, name: 'Georg' });
+    
+    await page.reload();
+
+    await enterPoll({ page, name: 'Fritz' });
+
+    await expect(page
+      .getByRole('heading')
+      .filter({ hasText: 'Die Ergebnisse der Umfrage sind da!' }))
+      .toBeVisible();
+
+    for (const game of defaultGames.concat(defaultShortGames)) {
+      await expect(page
+        .getByRole('heading')
+        .filter({ hasText: game.name }))
+        .toBeVisible();
+    }
   });
 });
 
