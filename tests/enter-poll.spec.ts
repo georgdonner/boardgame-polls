@@ -133,5 +133,25 @@ test.describe('Entering polls', () => {
         .toBeVisible();
     }
   });
+
+  test('Don\'t show results when poll was updated as last entry', async ({ pollPage }) => {
+    const { page } = pollPage;
+    
+    await enterPoll({ page, name: 'Georg' });
+    
+    await page.reload();
+
+    await enterPoll({ page, name: 'Georg' });
+
+    await expect(page
+      .getByRole('heading')
+      .filter({ hasText: 'Die Ergebnisse der Umfrage sind da!' }))
+      .not.toBeVisible();
+
+    await expect(page
+      .getByRole('heading')
+      .filter({ hasText: 'Danke für deine Teilnahme!' }))
+      .toBeVisible();
+  });
 });
 
