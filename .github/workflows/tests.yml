@@ -26,7 +26,7 @@ jobs:
         PUBLIC_VAPID_KEY: ${{ secrets.PUBLIC_VAPID_KEY }}
       run: docker compose up -d --wait
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: npx playwright install chromium
     - name: Run Playwright tests
       run: npm test
     - uses: actions/upload-artifact@v6
