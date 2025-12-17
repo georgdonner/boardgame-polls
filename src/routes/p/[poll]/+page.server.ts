@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ params }) => {
     };
   }
 
-  throw error(404, 'Poll not found');
+  error(404, 'Poll not found');
 }
 
 const parseEntry = (data: FormData) => {
@@ -97,7 +97,7 @@ export const actions: Actions = {
       .findOne({ _id: params.poll });
 
     if (!poll) {
-      throw error(404, 'Poll not found');
+      error(404, 'Poll not found');
     }
   
     const entry: Entry = parseEntry(data);
