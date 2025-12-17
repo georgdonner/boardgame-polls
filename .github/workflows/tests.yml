@@ -11,20 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
-    services:
-      mongo:
-        image: mongo
-        options: >-
-          --health-cmd mongosh
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 27017:27017
-
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
         node-version: 22
     - name: Create env file
@@ -33,22 +22,19 @@ jobs:
       run: npm ci
     - name: Lint
       run: npm run lint
-    - name: Build Docker image
-      run: docker build --build-arg PUBLIC_VAPID_KEY="${{ secrets.PUBLIC_VAPID_KEY }}" -t boardgame-polls .
-    - name: Run Docker container
-      run: docker run -p 3000:3000 \
-        -e MONGO_URL=mongodb://localhost:27017 \
-        -e PUBLIC_VAPID_KEY=${{ secrets.PUBLIC_VAPID_KEY }} \
-        -e VAPID_EMAIL=${{ secrets.VAPID_EMAIL }} \
-        -e PRIVATE_VAPID_KEY=${{ secrets.PRIVATE_VAPID_KEY }} \
-        boardgame-polls
+    - name: Start apps
+      env:
+        PUBLIC_VAPID_KEY: ${{ secrets.PUBLIC_VAPID_KEY }}
+      run: docker compose up -d --wait
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: npm test
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v6
       if: always()
       with:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
+    - name: Stop apps
+      run: docker compose down
