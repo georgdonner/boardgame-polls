@@ -1,7 +1,7 @@
 import { test as base, expect } from '@playwright/test';
 
-import type { PollParams } from './fixtures/poll-page.js';
-import { PollPage } from './fixtures/poll-page.js';
+import type { PollParams } from './fixtures/poll-page.ts';
+import { PollPage } from './fixtures/poll-page.ts';
 
 const defaultParams: PollParams = {
   participants: 2,
