@@ -1,9 +1,9 @@
 name: CI
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
 
 jobs:
   ci:
@@ -26,15 +26,22 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
-        node-version: 18
+        node-version: 22
     - name: Create env file
       run: echo "${{ secrets.CI_ENV }}" > .env
     - name: Install dependencies
       run: npm ci
     - name: Lint
       run: npm run lint
-    - name: Build client
-      run: npm run build
+    - name: Build Docker image
+      run: docker build --build-arg PUBLIC_VAPID_KEY="${{ secrets.PUBLIC_VAPID_KEY }}" -t boardgame-polls .
+    - name: Run Docker container
+      run: docker run -p 3000:3000 \
+        -e MONGO_URL=mongodb://localhost:27017 \
+        -e PUBLIC_VAPID_KEY=${{ secrets.PUBLIC_VAPID_KEY }} \
+        -e VAPID_EMAIL=${{ secrets.VAPID_EMAIL }} \
+        -e PRIVATE_VAPID_KEY=${{ secrets.PRIVATE_VAPID_KEY }} \
+        boardgame-polls
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests

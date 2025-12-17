@@ -3,7 +3,9 @@ import type { UserConfig } from 'vite';
 import mkcert from 'vite-plugin-mkcert'
 
 const config: UserConfig = {
-	server: {https: true},
+	server: {
+		https: {}
+	},
 	plugins: [sveltekit(), mkcert()],
 	build: {
 		target: ['ios12', 'esnext'],
