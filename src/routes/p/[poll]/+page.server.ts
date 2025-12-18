@@ -38,6 +38,7 @@ const parseEntry = (data: FormData) => {
     try {
       const pushSubscription: Subscription = JSON.parse(pushSubscriptionParam);
       entry.pushSubscription = pushSubscription;
+      console.log('Push subscription added for', entry.name);
     } catch (error) {
       console.error('Failed to parse push subscription');
     }
@@ -74,6 +75,12 @@ const saveEntry = async (db: Db, poll: Poll, entry: Entry): Promise<WithId<Poll>
   const updatedPoll = await db.collection<Poll>('polls')
     .findOneAndUpdate(filter, update, { returnDocument: 'after' });
 
+  if (hasAlreadyEntered) {
+    console.log('Entry updated for', entry.name);
+  } else {
+    console.log('Entry added for', entry.name);
+  }
+
   return updatedPoll.value;
 }
 
@@ -105,6 +112,7 @@ export const actions: Actions = {
     const updatedPoll = await saveEntry(db, poll, entry);
 
     if (updatedPoll?.ended) {
+      console.log('Poll ended:', updatedPoll.name, updatedPoll._id);
       await sendPushMessages(updatedPoll);
     }
 

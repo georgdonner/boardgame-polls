@@ -41,7 +41,7 @@
     <input type="text" name="name" required>
     
     <label for="participants">Anzahl der Teilnehmer:innen</label>
-    <input type="number" name="participants" value="4" min="1" required>
+    <input type="number" name="participants" value="3" min="1" required>
     
     <label for="rankingSize">Votes pro Teilnehmer:in</label>
     <input type="number" name="rankingSize" value="5" min="1" required>
