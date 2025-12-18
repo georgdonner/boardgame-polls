@@ -1,14 +1,17 @@
 import webpush from 'web-push';
 
-import { PUBLIC_VAPID_KEY } from '$env/static/public';
-import { PRIVATE_VAPID_KEY, VAPID_EMAIL } from '$env/static/private';
+import { building } from '$app/environment';
+import { env as publicEnv } from '$env/dynamic/public';
+import { env as privateEnv } from '$env/dynamic/private';
 import type { Subscription } from '$lib/server/db';
 
-webpush.setVapidDetails(
-  `mailto:${VAPID_EMAIL}`,
-  PUBLIC_VAPID_KEY,
-  PRIVATE_VAPID_KEY,
-);
+if (!building) {
+  webpush.setVapidDetails(
+    `mailto:${privateEnv.VAPID_EMAIL}`,
+    publicEnv.PUBLIC_VAPID_KEY,
+    privateEnv.PRIVATE_VAPID_KEY,
+  );
+}
 
 export interface PushData {
   text: string;

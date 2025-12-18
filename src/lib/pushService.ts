@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { PUBLIC_VAPID_KEY } from '$env/static/public';
+import { env as publicEnv } from '$env/dynamic/public';
 
 export const isSupported = browser && ('serviceWorker' in navigator) && ('PushManager' in window) && ('Notification' in window);
 
@@ -8,7 +8,7 @@ export const subscribe = async () => {
 
   return registration.pushManager.subscribe({
     userVisibleOnly: true,
-    applicationServerKey: urlBase64ToUint8Array(PUBLIC_VAPID_KEY),
+    applicationServerKey: urlBase64ToUint8Array(publicEnv.PUBLIC_VAPID_KEY),
   }); 
 }
 

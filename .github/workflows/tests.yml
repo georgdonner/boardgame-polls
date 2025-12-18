@@ -1,9 +1,8 @@
 name: CI
+
 on:
-  push:
-    branches: [ main, master ]
   pull_request:
-    branches: [ main, master ]
+    branches: [main]
 
 jobs:
   ci:
@@ -11,37 +10,30 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
-    services:
-      mongo:
-        image: mongo
-        options: >-
-          --health-cmd mongosh
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 27017:27017
-
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
-        node-version: 18
+        node-version: 22.13.0
     - name: Create env file
       run: echo "${{ secrets.CI_ENV }}" > .env
     - name: Install dependencies
       run: npm ci
     - name: Lint
       run: npm run lint
-    - name: Build client
-      run: npm run build
+    - name: Start apps
+      env:
+        PUBLIC_VAPID_KEY: ${{ secrets.PUBLIC_VAPID_KEY }}
+      run: docker compose up -d --wait
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: npx playwright install chromium
     - name: Run Playwright tests
       run: npm test
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v6
       if: always()
       with:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
+    - name: Stop apps
+      run: docker compose down

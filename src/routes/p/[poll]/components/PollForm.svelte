@@ -61,7 +61,7 @@
   <form
     method="POST"
     action="?/vote"
-    use:enhance={({ data: formData }) => {
+    use:enhance={({ formData }) => {
       formData.append('ranking', ranking.map(it => it._id).join(','));
       formData.append('rankingShort', rankingShort.map(it => it._id).join(','));
       if (! isLast && pushSubscription) {

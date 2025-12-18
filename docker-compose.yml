@@ -1,0 +1,39 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: bgpolls_db
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: boardgameplanner
+    volumes:
+      - bgpolls_mongodb_data:/data/db
+      - ./seed:/docker-entrypoint-initdb.d
+    networks:
+      - bgpolls_network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PUBLIC_VAPID_KEY: ${PUBLIC_VAPID_KEY}
+    container_name: bgpolls_app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      MONGO_URL: mongodb://mongodb:27017/boardgameplanner
+      ORIGIN: http://localhost:3000
+    depends_on:
+      - mongodb
+    networks:
+      - bgpolls_network
+
+volumes:
+  bgpolls_mongodb_data:
+
+networks:
+  bgpolls_network:
+    driver: bridge
