@@ -29,6 +29,7 @@ export const actions: Actions = {
 
         if (insertedId) {
           inserted = insertedId;
+          console.log('Poll inserted with id', insertedId);
         }
       } catch (error) {
         if ((error as Error).name === 'MongoServerError' && (error as MongoError).code === 11000) {
